@@ -106,8 +106,22 @@ function animate() {
     requestAnimationFrame(animate);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     player.draw();
-    projectiles.forEach(projectile => projectile.update());
-    enemies.forEach(enemy => enemy.update());
+    projectiles.forEach((projectile) => {
+        projectile.update();
+    });
+    enemies.forEach((enemy, index) => {
+        enemy.update();
+
+        projectiles.forEach((projectile, proIndex) => {
+            const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
+            if (dist - enemy.radius - projectile.radius < 1) {
+                setTimeout(() => {
+                    enemies.splice(index, 1);
+                    projectiles.splice(proIndex, 1);
+                }, 0);
+            }
+        });
+    });
 }
 
 
