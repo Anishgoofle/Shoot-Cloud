@@ -82,7 +82,13 @@ const player = new Player(x, y, 30, 'blue');
 
 function spawnEnemies() {
     setInterval(() => {
-
+        const x = 100;
+        const y = 100;
+        const radius = 30;
+        const color = 'green';
+        const angle = Math.atan2(canvas.height / 2 - y, canvas.width / 2 - x);
+        const velocity = { x: Math.cos(angle), y: Math.sin(angle) };
+        enemies.push(new Enemy(x, y, radius, color, velocity));
     }, 1000);
 }
 
@@ -91,6 +97,7 @@ function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     player.draw();
     projectiles.forEach(projectile => projectile.update());
+    enemies.forEach(enemy => enemy.update());
 }
 
 
@@ -100,3 +107,4 @@ addEventListener('click', (e) => {
     projectiles.push(new Projectile(canvas.width / 2, canvas.height / 2, 5, 'red', velocity));
 });
 animate();
+spawnEnemies();
