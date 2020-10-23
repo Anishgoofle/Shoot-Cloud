@@ -1,8 +1,28 @@
+<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
 <style>
     body {
         margin: 0;
+        background: black;
     }
 </style>
+
+
+<!-- Score card div -->
+<div class="fixed text-white text-sm ml-2 mt-1 select-none">
+    <span>Score: </span>
+    <span id="score">0</span>
+</div>
+
+<div class="fixed inset-0 flex items-center justify-center" id="modal">
+    <div class="bg-white max-w-md w-full p-6 text-center">
+        <h1 class="text-4xl font-bold leading-none" id="scoreOnModal">0</h1>
+        <p class="text-sm text-gray-700 mb-4">points</p>
+
+        <button class="bg-blue-500 text-white w-full py-3" id="game-btn">Start Game</button>
+    </div>
+</div>
+
+<!-- Game canvas -->
 <canvas></canvas>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.5.1/gsap.min.js"

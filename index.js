@@ -5,6 +5,10 @@ const ctx = canvas.getContext('2d');
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 
+const scoreEl = document.querySelector('#score');
+const gameBtn = document.querySelector('#game-btn');
+const modal = document.querySelector('#modal');
+const scoreOnModal = document.querySelector('#scoreOnModal');
 
 class Player {
     constructor(x, y, radius, color) {
@@ -99,17 +103,23 @@ class Particle {
 }
 
 
-const projectiles = [];
-const enemies = [];
-const particles = [];
+let projectiles = [];
+let enemies = [];
+let particles = [];
 
 const projectile = new Projectile(canvas.width / 2, canvas.height / 2, 5, 'red', { x: 1, y: 1 });
 
 const x = canvas.width / 2;
 const y = canvas.height / 2;
 
-const player = new Player(x, y, 10, 'white');
+let player = new Player(x, y, 10, 'white');
 
+function init() {
+    player = new Player(x, y, 10, 'white');
+    projectiles = [];
+    enemies = [];
+    particles = [];
+}
 function spawnEnemies() {
     setInterval(() => {
         const radius = Math.random() * (30 - 4) + 4;
@@ -133,6 +143,7 @@ function spawnEnemies() {
 }
 
 let animationId;
+let score = 0;
 function animate() {
     animationId = requestAnimationFrame(animate);
     ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
@@ -166,6 +177,8 @@ function animate() {
 
         if (dist - enemy.radius - player.radius < 1) {
             cancelAnimationFrame(animationId);
+            modal.style.display = 'flex';
+            scoreOnModal.innerHTML = score;
         }
 
         projectiles.forEach((projectile, proIndex) => {
@@ -173,6 +186,9 @@ function animate() {
             const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
 
             if (dist - enemy.radius - projectile.radius < 1) {
+
+                score += 100;
+                scoreEl.innerHTML = score;
 
                 //Creating explosions
                 for (let i = 0; i < enemy.radius * 2; i++) {
@@ -202,5 +218,11 @@ addEventListener('click', (e) => {
     const velocity = { x: Math.cos(angle) * 5, y: Math.sin(angle) * 5 };
     projectiles.push(new Projectile(canvas.width / 2, canvas.height / 2, 5, 'white', velocity));
 });
-animate();
-spawnEnemies();
+
+
+gameBtn.addEventListener('click', () => {
+    init();
+    animate();
+    spawnEnemies();
+    modal.style.display = 'none';
+});
